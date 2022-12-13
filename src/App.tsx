@@ -3,25 +3,38 @@ import './App.css'
 import styled from 'styled-components'
 import axios from 'axios'
 import { Data } from './Interface'
+import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 
 function App() {
 
   const [IP, setIP] = useState<string>("")
   const [data, setData] = useState<Data>()
+  const [lat, setLat] = useState<number>(0)
+  const [lng, setLng] = useState<number>(0)
 
-  const search = () => {
-    axios.get(`https://geo.ipify.org/api/v2/country,city?apiKey=at_Np7ew5wGSQdfdRxr1fCsqnlbWFwh5&ipAddress=${IP}`)
-      .then(res => setData(res.data))
-    // console.log(data)
+  const search = async () => {
+    const respons = await axios.get(`https://geo.ipify.org/api/v2/country,city?apiKey=at_Np7ew5wGSQdfdRxr1fCsqnlbWFwh5&ipAddress=${IP}`)
+    const Data: Data = await respons.data
+
+    setData(Data)
+
+    setLat(Data.location.lat)
+    setLng(Data.location.lng)
   }
 
   useEffect(() => {
-    axios.get(`https://geo.ipify.org/api/v2/country,city?apiKey=at_Np7ew5wGSQdfdRxr1fCsqnlbWFwh5&ipAddress=${IP}`)
-      .then(res => setData(res.data))
+    search()
   }, [])
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIP(e.target.value)
+  }
+
+  const LiveLocation = ({ center }: any) => {
+    const map: any = useMap()
+    map.setView(center)
+    return null;
   }
 
   return (
@@ -31,7 +44,7 @@ function App() {
           <Title>IP Address Tracker</Title>
           <InputDiv>
             <Input
-
+              placeholder='8.8.8.8'
               onChange={handleChange}
             />
 
@@ -57,6 +70,19 @@ function App() {
           </Result>
         </Wrapper>
       </Header>
+
+      <MapContainer center={[lat, lng]} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <LiveLocation center={[lat, lng]} />
+        <Marker position={[lat, lng]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </MapContainer>
     </Container>
   )
 }
@@ -77,6 +103,8 @@ const Wrapper = styled.div`
   width: 327px;
   margin: auto;
   padding-top: 29px;
+  position: relative;
+  z-index: 100;
 `
 
 const Title = styled.h1`
@@ -126,6 +154,7 @@ const Result = styled.div`
   background-color: white;
   margin-top: 24px;
   border-radius: 15px ;
+  z-index: 10;
 `
 
 const Div = styled.div`
