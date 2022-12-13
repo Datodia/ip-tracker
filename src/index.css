@@ -11,3 +11,11 @@
 body {
   font-family: 'Rubik';
 }
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+  /* z-index: -1; */
+  position: relative;
+  z-index: 1;
+}
