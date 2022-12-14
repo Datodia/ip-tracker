@@ -4,6 +4,9 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { Data } from './Interface'
 import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
+import * as L from 'leaflet'
+
+
 
 function App() {
 
@@ -11,6 +14,20 @@ function App() {
   const [data, setData] = useState<Data>()
   const [lat, setLat] = useState<number>(0)
   const [lng, setLng] = useState<number>(0)
+
+  const svgIcon = L.divIcon({
+    html: `
+    <svg xmlns="http://www.w3.org/2000/svg" 
+    width="46" 
+    height="56">
+    <path fill-rule="evenodd" 
+    d="M39.263 7.673c8.897 8.812 8.966 23.168.153 32.065l-.153.153L23 56 6.737 39.89C-2.16 31.079-2.23 16.723 6.584 7.826l.153-.152c9.007-8.922 23.52-8.922 32.526 0zM23 14.435c-5.211 0-9.436 4.185-9.436 9.347S17.79 33.128 23 33.128s9.436-4.184 9.436-9.346S28.21 14.435 23 14.435z"/>
+    </svg>`,
+    iconSize: [40, 40],
+  });
+
+  L.Marker.prototype.options.icon = svgIcon;
+
 
   const search = async () => {
     const respons = await axios.get(`https://geo.ipify.org/api/v2/country,city?apiKey=at_Np7ew5wGSQdfdRxr1fCsqnlbWFwh5&ipAddress=${IP}`)
@@ -31,6 +48,12 @@ function App() {
     setIP(e.target.value)
   }
 
+  const keyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      search()
+    }
+  }
+
   const LiveLocation = ({ center }: any) => {
     const map: any = useMap()
     map.setView(center)
@@ -46,6 +69,7 @@ function App() {
             <Input
               placeholder='8.8.8.8'
               onChange={handleChange}
+              onKeyPress={keyPress}
             />
 
             <Search onClick={search}><Img src='assets/icon-arrow.svg' /></Search>
