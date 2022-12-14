@@ -39,9 +39,9 @@ function App() {
     setLng(Data.location.lng)
   }
 
-  // useEffect(() => {
-  //   search()
-  // }, [])
+  useEffect(() => {
+    search()
+  }, [])
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +155,6 @@ const Title = styled.h1`
 
 const InputDiv = styled.div`
   height: 58px;
-  background-color: red;
   border-radius: 15px;
   display: flex;
   align-items: center;
@@ -200,7 +199,7 @@ const Img = styled.img`
 
 const Result = styled.div`
   height: 294px;
-  border: 1px solid red;
+  border: 1px solid white;
   background-color: white;
   margin-top: 24px;
   border-radius: 15px ;
