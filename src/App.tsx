@@ -50,9 +50,9 @@ function App() {
     // }
   }
 
-  // useEffect(() => {
-  //   search()
-  // }, [])
+  useEffect(() => {
+    search()
+  }, [])
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
