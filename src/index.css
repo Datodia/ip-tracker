@@ -19,3 +19,8 @@ body {
   position: relative;
   z-index: 1;
 }
+
+.leaflet-marker-icon {
+  border: none;
+  background: none;
+}
